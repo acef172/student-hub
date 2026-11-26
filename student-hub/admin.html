@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - YUKON</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar admin-navbar">
+        <div class="nav-container">
+            <div class="logo">🎓 YUKON - Admin</div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" onclick="showTab('dashboard')">Dashboard</a></li>
+                <li><a href="#" class="nav-link" onclick="showTab('videos')">Manage Videos</a></li>
+                <li><a href="#" class="nav-link" onclick="showTab('submissions')">Submissions</a></li>
+                <li><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div id="dashboard" class="admin-tab active">
+            <h1>📊 Admin Dashboard</h1>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎥</div>
+                    <h3>Videos Added</h3>
+                    <p id="videoCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <h3>Student Submissions</h3>
+                    <p id="submissionCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <h3>Total Visitors</h3>
+                    <p id="visitorCount">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="videos" class="admin-tab">
+            <h1>🎥 Manage Videos</h1>
+            
+            <div class="admin-form">
+                <h2>Add New Video</h2>
+                <form id="videoForm" class="form">
+                    <div class="form-group">
+                        <label for="videoTitle">Video Title</label>
+                        <input type="text" id="videoTitle" placeholder="e.g., Algebra Basics" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="videoDescription">Description</label>
+                        <textarea id="videoDescription" placeholder="Brief description of the video" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="videoSubject">Subject</label>
+                        <select id="videoSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Science">Science</option>
+                            <option value="English">English</option>
+                            <option value="Marathi">Marathi</option>
+                            <option value="Social Studies">Social Studies</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="videoUrl">YouTube/Video URL</label>
+                        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/embed/..." required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Video</button>
+                </form>
+            </div>
+
+            <div class="videos-list">
+                <h2>Uploaded Videos</h2>
+                <div id="videosList"></div>
+            </div>
+        </div>
+
+        <div id="submissions" class="admin-tab">
+            <h1>📋 Student Submissions</h1>
+            <div id="submissionsList" class="submissions-list"></div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script>
+        if (!localStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-login.html';
+        }
+
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.admin-tab');
+            const links = document.querySelectorAll('.admin-navbar .nav-link');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            links.forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'videos') loadVideos();
+            if (tabName === 'submissions') loadSubmissions();
+            if (tabName === 'dashboard') updateDashboard();
+        }
+
+        function updateDashboard() {
+            const videos = JSON.parse(localStorage.getItem('videos')) || [];
+            const submissions = JSON.parse(localStorage.getItem('studentNeeds')) || [];
+            
+            document.getElementById('videoCount').textContent = videos.length;
+            document.getElementById('submissionCount').textContent = submissions.length;
+            document.getElementById('visitorCount').textContent = Math.floor(Math.random() * 1000) + 100;
+        }
+
+        function loadVideos() {
+            const videos = JSON.parse(localStorage.getItem('videos')) || [];
+            const list = document.getElementById('videosList');
+            
+            if (videos.length === 0) {
+                list.innerHTML = '<p>No videos added yet</p>';
+                return;
+            }
+
+            list.innerHTML = videos.map((video, index) => `
+                <div class="video-item">
+                    <div class="video-details">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <span class="subject-badge">${video.subject}</span>
+                    </div>
+                    <button class="btn btn-danger" onclick="deleteVideo(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function loadSubmissions() {
+            const submissions = JSON.parse(localStorage.getItem('studentNeeds')) || [];
+            const list = document.getElementById('submissionsList');
+            
+            if (submissions.length === 0) {
+                list.innerHTML = '<p>No submissions yet</p>';
+                return;
+            }
+
+            list.innerHTML = submissions.map((sub, index) => `
+                <div class="submission-item">
+                    <h3>${sub.name}</h3>
+                    <p><strong>Class:</strong> ${sub.class}</p>
+                    <p><strong>Subject:</strong> ${sub.subject}</p>
+                    <p><strong>Topic:</strong> ${sub.topic}</p>
+                    <p><strong>Message:</strong> ${sub.message}</p>
+                    <p><strong>Date:</strong> ${sub.timestamp}</p>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('videoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const video = {
+                title: document.getElementById('videoTitle').value,
+                description: document.getElementById('videoDescription').value,
+                subject: document.getElementById('videoSubject').value,
+                url: document.getElementById('videoUrl').value
+            };
+
+            let videos = JSON.parse(localStorage.getItem('videos')) || [];
+            videos.push(video);
+            localStorage.setItem('videos', JSON.stringify(videos));
+
+            alert('✓ Video added successfully!');
+            this.reset();
+            loadVideos();
+        });
+
+        function deleteVideo(index) {
+            if (confirm('Are you sure you want to delete this video?')) {
+                let videos = JSON.parse(localStorage.getItem('videos')) || [];
+                videos.splice(index, 1);
+                localStorage.setItem('videos', JSON.stringify(videos));
+                loadVideos();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'index.html';
+        }
+
+        updateDashboard();
+    </script>
+</body>
+</html>

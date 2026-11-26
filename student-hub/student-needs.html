@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Needs - YUKON</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎓 YUKON</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="student-needs.html" class="nav-link active">Student Needs</a></li>
+                <li><a href="pyqs.html" class="nav-link">PYQs</a></li>
+                <li><a href="videos.html" class="nav-link">Videos</a></li>
+                <li><a href="admin-login.html" class="nav-link admin-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>Personalized Learning</h1>
+            <p class="subtitle">Tell Us Your Needs & We'll Help You Succeed</p>
+        </header>
+
+        <section class="needs-section">
+            <div class="form-container">
+                <h2>What Do You Need Help With?</h2>
+                <form id="needsForm" class="needs-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="class">Class/Standard</label>
+                        <select id="class" name="class" required>
+                            <option value="">Select your class</option>
+                            <option value="8th">8th Standard</option>
+                            <option value="9th">9th Standard</option>
+                            <option value="10th">10th Standard</option>
+                            <option value="12th">12th Standard</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select subject</option>
+                            <option value="math">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="english">English</option>
+                            <option value="marathi">Marathi</option>
+                            <option value="social">Social Studies</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic">Topic/Chapter</label>
+                        <input type="text" id="topic" name="topic" placeholder="What topic do you need help with?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Additional Details</label>
+                        <textarea id="message" name="message" placeholder="Tell us more about what you need..." rows="5"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit Your Needs</button>
+                </form>
+                <div id="successMessage" class="success-message" style="display: none;">
+                    ✓ Thank you! We'll personalize your learning experience.
+                </div>
+            </div>
+
+            <div class="needs-info">
+                <h2>How It Works</h2>
+                <div class="info-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Tell Us Your Needs</h3>
+                        <p>Fill out the form with your class, subject, and topics</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Get Personalized Resources</h3>
+                        <p>We curate materials specifically for your learning goals</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Learn & Grow</h3>
+                        <p>Access videos, notes, and practice questions tailored for you</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 YUKON. All rights reserved. | <a href="admin-login.html">Admin</a></p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script>
+        document.getElementById('needsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                class: document.getElementById('class').value,
+                subject: document.getElementById('subject').value,
+                topic: document.getElementById('topic').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            let submissions = JSON.parse(localStorage.getItem('studentNeeds')) || [];
+            submissions.push(formData);
+            localStorage.setItem('studentNeeds', JSON.stringify(submissions));
+            
+            document.getElementById('needsForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('needsForm').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('needsForm').reset();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

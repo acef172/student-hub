@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos - YUKON</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎓 YUKON</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="student-needs.html" class="nav-link">Student Needs</a></li>
+                <li><a href="pyqs.html" class="nav-link">PYQs</a></li>
+                <li><a href="videos.html" class="nav-link active">Videos</a></li>
+                <li><a href="admin-login.html" class="nav-link admin-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>🎥 Video Tutorials</h1>
+            <p class="subtitle">Easy-to-Understand Video Explanations</p>
+        </header>
+
+        <div class="videos-container" id="videosContainer">
+        </div>
+
+        <div id="noVideos" class="no-content">
+            <p>📺 No videos added yet. Check back soon for curated educational content!</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 YUKON. All rights reserved. | <a href="admin-login.html">Admin</a></p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script>
+        function loadVideos() {
+            const videos = JSON.parse(localStorage.getItem('videos')) || [];
+            const container = document.getElementById('videosContainer');
+            const noVideos = document.getElementById('noVideos');
+
+            if (videos.length === 0) {
+                container.style.display = 'none';
+                noVideos.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            noVideos.style.display = 'none';
+            container.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <iframe width="100%" height="200" src="${video.url}" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <span class="video-subject">${video.subject}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        loadVideos();
+    </script>
+</body>
+</html>

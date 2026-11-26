@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYQs - YUKON</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎓 YUKON</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="student-needs.html" class="nav-link">Student Needs</a></li>
+                <li><a href="pyqs.html" class="nav-link active">PYQs</a></li>
+                <li><a href="videos.html" class="nav-link">Videos</a></li>
+                <li><a href="admin-login.html" class="nav-link admin-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>📚 Past Year Questions</h1>
+            <p class="subtitle">Access Maharashtra Board Question Papers</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showClass('10th')">10th Standard</button>
+            <button class="tab-btn" onclick="showClass('12th')">12th Standard</button>
+            <button class="tab-btn" onclick="showClass('9th')">9th Standard</button>
+            <button class="tab-btn" onclick="showClass('8th')">8th Standard</button>
+        </div>
+
+        <div class="pyq-container">
+            <div class="info-box">
+                ℹ️ All papers are sourced from Aglasem. Click on any paper to view or download.
+            </div>
+
+            <div id="class-10th" class="class-content">
+                <h2>10th Standard - Maharashtra Board</h2>
+                <iframe src="https://docs.aglasem.com/org/maharashtra-board/mh-class-10/question-paper"></iframe>
+            </div>
+
+            <div id="class-12th" class="class-content" style="display: none;">
+                <h2>12th Standard - Maharashtra Board</h2>
+                <iframe src="https://docs.aglasem.com/org/maharashtra-board/mh-class-12/question-paper"></iframe>
+            </div>
+
+            <div id="class-9th" class="class-content" style="display: none;">
+                <h2>9th Standard - Maharashtra Board</h2>
+                <iframe src="https://docs.aglasem.com/org/maharashtra-board/mh-class-9/question-paper"></iframe>
+            </div>
+
+            <div id="class-8th" class="class-content" style="display: none;">
+                <h2>8th Standard - Maharashtra Board</h2>
+                <iframe src="https://docs.aglasem.com/org/maharashtra-board/mh-class-8/question-paper"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 YUKON. All rights reserved. | <a href="admin-login.html">Admin</a></p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script>
+        function showClass(className) {
+            const allContents = document.querySelectorAll('.class-content');
+            allContents.forEach(content => content.style.display = 'none');
+
+            document.getElementById('class-' + className.toLowerCase()).style.display = 'block';
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
